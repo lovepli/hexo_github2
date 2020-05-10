@@ -46,6 +46,7 @@ favicon:
   # safari_pinned_tab: /images/logo.svg
   #android_manifest: /images/manifest.json
   #ms_browserconfig: /images/browserconfig.xml
+  # 这里的/images路径是themes/next/source下的images
   small: /images/yaya.jpg
   medium: /images/yaya.jpg
   apple_touch_icon: /images/yaya.jpg
@@ -72,7 +73,8 @@ footer:
   copyright:
 
   # Powered by Hexo & NexT
-  powered: true
+   # 不显示next原有的powered和version footer
+  powered: false
 
   # Beian ICP and gongan information for Chinese users. See: http://www.beian.miit.gov.cn, http://www.beian.gov.cn
   beian:
@@ -100,7 +102,7 @@ creative_commons:
 # ---------------------------------------------------------------
 # Scheme Settings
 # ---------------------------------------------------------------
-
+# 首页信息与菜单显示样式，Pisces为网站信息显示在左侧，Mist在顶部，更多的自行尝试
 # Schemes
 #scheme: Muse
 #scheme: Mist
@@ -176,10 +178,12 @@ sidebar:
   # Enable sidebar on narrow view (only for Muse | Mist).
   onmobile: false
 
+#头像设置
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
   url: /images/yali.jpg
+  # 头像下显示的社交图标与链接，||后为fontawesome上的图标名
   # If true, the avatar will be dispalyed in circle.
   rounded: false
   # If true, the avatar will be rotated with the cursor.
@@ -194,7 +198,7 @@ site_state: true
 # Value before `||` delimiter is the target permalink, value after `||` delimiter is the name of Font Awesome icon.
 social:
   GitHub: https://github.com/lovepli || github
-  #E-Mail: mailto:yourname@gmail.com || envelope
+  E-Mail: mailto:lovepli.cn@gmail.com || envelope
   #微博: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
   #Twitter: https://twitter.com/yourname || twitter
@@ -276,10 +280,11 @@ tag_icon: false
 
 # Reward (Donate)
 # Front-matter variable (unsupport animation).
+# 奖赏设置，true则每篇文章末尾会新增捐赠按钮，点击会显示收款图片(如果是直接显示我肯定会直接enable false的[doge])
 reward_settings:
   # If true, reward will be displayed in every article by default.
   enable: true
-  #animation: true
+  animation: false
   comment: '坚持原创技术分享，您的支持将鼓励我继续创作！'
 
 reward:
@@ -411,9 +416,10 @@ bookmark:
   save: auto
 
 # `Follow me on GitHub` banner in the top-right corner.
+# 头部显示github banner
 github_banner:
-  enable: false
-  permalink: https://github.com/yourname
+  enable: true
+  permalink: https://github.com/lovepli
   title: Follow me on GitHub
 
 
@@ -767,8 +773,9 @@ algolia_search:
 
 # Local Search
 # Dependencies: https://github.com/theme-next/hexo-generator-searchdb
+#启用本地搜索
 local_search:
-  enable: false
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
   trigger: auto
