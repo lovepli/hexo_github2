@@ -4,12 +4,12 @@
 
 # Site
 title: lovepli
-subtitle: ''
+subtitle: '一名普通的搬砖工'
 description: '身体和灵魂，总要有一个在路上。'
 keywords:
 author: James Li
 language: zh-CN
-timezone: ''
+timezone: 'Asia/Shanghai'
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -58,7 +58,9 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 5
+  # 每页只显示一篇文章
+  per_page: 1
+  # 根据创建时间排序，如果文章有设置top值，则先按top由高到低排，目前个人是在索引文章上加了top值设为首页文章的
   order_by: -date
 
 archive_generator:
@@ -102,11 +104,18 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: next
+# 添加搜索功能，需先安装搜索插件：npm install hexo-generator-searchdb并将themes的_config.yml中local_search:enable设为true
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
   repo: git@github.com:lovepli/lovepli.github.io.git
+  #repo: https://gitee.com/lovepli_cn/lovepli_cn.git
   branch: master
   message:
