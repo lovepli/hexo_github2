@@ -47,10 +47,10 @@ favicon:
   #android_manifest: /images/manifest.json
   #ms_browserconfig: /images/browserconfig.xml
   # 这里的/images路径是themes/next/source下的images
-  small: /images/yaya.jpg
-  medium: /images/yaya.jpg
-  apple_touch_icon: /images/yaya.jpg
-  safari_pinned_tab: /images/yaya.jpg
+  small: /images/favicon.ico
+  medium: /images/favicon.ico
+  apple_touch_icon: /images/favicon.ico
+  safari_pinned_tab: /images/favicon.ico
 
 # Show multilingual switcher in footer.
 language_switcher: false
@@ -203,6 +203,7 @@ site_state: true
 social:
   GitHub: https://github.com/lovepli || github
   E-Mail: mailto:lovepli.cn@gmail.com || envelope
+  #Docsify文档: https://lovepli_cn.gitee.io/docsify-demo
   #微博: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
   #Twitter: https://twitter.com/yourname || twitter
@@ -212,11 +213,13 @@ social:
   #Instagram: https://instagram.com/yourname || instagram
   #Skype: skype:yourname?call|chat || skype
 
+#图标名字
 social_icons:
   enable: true
-  #icons_only: false
-  #transition: false
+  icons_only: false
+  transition: false
   GitHub: github
+  #Docsify文档: meh-o  #还有有趣的图标 heartbeat spinner 通过图标网站https://fontawesome.com/icons?from=io
 
 # Blog rolls
 links_settings:
@@ -272,6 +275,14 @@ post_meta:
     another_day: true
   categories: true
 
+  #文章字数统计
+  # Post wordcount display settings
+# Dependencies: https://github.com/willin/hexo-wordcount
+post_wordcount:
+  item_text: true
+  wordcount: true
+  min2read: true
+
 # Post wordcount display settings
 # Dependencies: https://github.com/theme-next/hexo-symbols-count-time
 symbols_count_time:
@@ -304,6 +315,7 @@ follow_me:
   #Telegram: https://t.me/channel_name || telegram
   #WeChat: /images/wechat_channel.jpg || wechat
   #RSS: /atom.xml || rss
+
 
 # Related popular posts
 # Dependencies: https://github.com/tea3/hexo-related-popular-posts
@@ -395,12 +407,13 @@ codeblock:
     # Available values: default | flat | mac
     style:
 
+# 浏览页面的时候显示当前浏览进度
 back2top:
   enable: true
   # Back to top in sidebar.
   sidebar: false
   # Scroll percent label in b2t button.
-  scrollpercent: false
+  scrollpercent: true
 
 # Reading progress bar
 reading_progress:
@@ -646,19 +659,21 @@ changyan:
   appkey:
   #post_meta_order: 0
 
+#评论功能
 # Valine
 # For more information: https://valine.js.org, https://github.com/xCss/Valine
 valine:
-  enable: false
-  appid: # Your leancloud application appid
-  appkey: # Your leancloud application appkey
-  notify: false # Mail notifier
-  verify: false # Verification code
-  placeholder: Just go go # Comment box placeholder
-  avatar: mm # Gravatar style
-  guest_info: nick,mail,link # Custom comment header
-  pageSize: 10 # Pagination size
-  language: # Language, available values: en, zh-cn
+  enable: true
+  appid: p4wAcGXeYyOl1WkgIK2k35yt-gzGzoHsz
+  appkey: MmMcE9bjUyCm4Fk3tCHqTVRg
+  notify: false # 新留言是否需要通知 https://github.com/xCss/Valine/wiki
+  verify: false # 是否需要验证，验证比较反人类建议false关闭
+  placeholder: ヾﾉ≧∀≦)o来啊，快活啊! # 默认留言框内的文字
+  avatar: mm # 默认头像 mm
+  guest_info: nick,mail,link # 默认留言框的头部需要访问者输入的信息
+  pageSize: 10 # 默认单页的留言条数
+  language: zh-cn # Language, available values: en, zh-cn
+  # 是否开启当前文章阅读量统计
   visitor: false # Article reading statistic
   comment_count: true # If false, comment count will only be displayed in post page, not in home page
   recordIP: false # Whether to record the commenter IP
@@ -804,6 +819,8 @@ local_search:
 # Swiftype Search API Key
 swiftype_key:
 
+#给项目添加readme文件
+skip_render: README.md
 
 # ---------------------------------------------------------------
 # Chat Services
@@ -874,7 +891,7 @@ mermaid:
 # Use velocity to animate everything.
 # For more information: http://velocityjs.org
 motion:
-  enable: true
+  enable: false
   async: false
   transition:
     # Transition variants:
@@ -993,7 +1010,7 @@ vendors:
   # Valine
   # valine: //cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js
   # valine: //cdnjs.cloudflare.com/ajax/libs/valine/1.3.10/Valine.min.js
-  valine:
+  valine: https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js
 
   # Gitalk
   # gitalk_js: //cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js
@@ -1041,6 +1058,40 @@ vendors:
   # Internal version: 1.0.0
   # canvas_ribbon: //cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js
   canvas_ribbon:
+
+  # 文章末尾添加“本文结束”标记
+passage_end_tag:
+  enabled: true
+
+# 分享，只支持http,不支持https
+#JiaThis: true
+
+# Online contact 
+daovoice: true
+daovoice_app_id: cabe19be #这里输入前面获取的app_id
+
+# Fireworks 鼠标点击爆炸效果
+fireworks: true
+
+# Security
+#文章加密
+encrypt: # hexo-blog-encrypt
+  enable: true
+  # default_abstract: 这是一篇加密文章，内容可能是个人情感宣泄或者收费技术。如果你确实想看，请与我联系。
+  # default_message: 输入密码，查看文章。
+
+#设置SSR
+#rss: /atom.xml
+
+#设置红心
+# footer: 
+#   icon:
+#     name: fas fa-heartbeat
+#     animated: true
+#     color: "#ff0000"
+
+
+
 
 # Assets
 css: css

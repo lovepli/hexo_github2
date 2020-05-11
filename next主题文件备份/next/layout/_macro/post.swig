@@ -207,6 +207,12 @@
       {%- endif %}
     </div>
 
+    <div>
+  {% if not is_index %}
+    {% include 'passage-end-tag.swig' %}
+  {% endif %}
+   </div>
+
     {#####################}
     {### END POST BODY ###}
     {#####################}
@@ -235,7 +241,7 @@
           {%- if theme.tag_icon %}
             {%- set tag_indicate = '<i class="fa fa-tag"></i>' %}
           {% else %}
-            {%- set tag_indicate = '#' %}
+            {%- set tag_indicate = '<i class="fa fa-tag"></i>' %}
           {%- endif %}
           <div class="post-tags">
             {%- for tag in post.tags.toArray() %}

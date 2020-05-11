@@ -100,8 +100,6 @@ include:
 exclude:
 ignore:
 
-# Extensions
-## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: next
 # 添加搜索功能，需先安装搜索插件：npm install hexo-generator-searchdb并将themes的_config.yml中local_search:enable设为true
@@ -110,6 +108,39 @@ search:
   field: post
   format: html
   limit: 10000
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+#添加RSS
+#plugins: hexo-generate-feed
+# feed
+# Dependencies: https://github.com/hexojs/hexo-generator-feed
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+    
+#设置萌宠
+# Live2D
+## https://github.com/EYHN/hexo-helper-live2d
+live2d:
+  enable: true
+  scriptFrom: local
+  pluginRootPath: live2dw/
+  pluginJsPath: lib/
+  pluginModelPath: assets/
+  tagMode: false
+  debug: false
+  model:
+     use: live2d-widget-model-koharu
+  display:
+     position: right
+     width: 150
+     height: 300
+  mobile:
+     show: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
