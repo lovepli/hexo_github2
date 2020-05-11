@@ -3,6 +3,7 @@ title: github+gitpages+hexo搭建个人博客
 date: 2020-04-30 00:49:20
 tags: 我的博客
 categories: 其他
+password: password
 
 # hexo 搭建个人博客
 ---
