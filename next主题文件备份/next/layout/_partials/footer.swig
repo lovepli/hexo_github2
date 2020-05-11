@@ -1,7 +1,6 @@
-//用下面的符号注释，注释代码用下面括号括起来
-<!-- -->
 
-<!--
+<!-- 可以用下面的符号注释，注释代码用下面括号括起来 -->
+<!--  -->
 
 {%- if theme.footer.beian.enable %}
   <div class="beian">
@@ -63,6 +62,12 @@
   </div>
 {%- endif %}
 
--->
+{% if theme.footer.counter %}
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+     <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+{% endif %}
+
 
 {{- next_inject('footer') }}

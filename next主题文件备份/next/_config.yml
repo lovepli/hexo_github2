@@ -76,6 +76,10 @@ footer:
    # 不显示next原有的powered和version footer
   powered: false
 
+  #统计
+  counter: true
+
+
   # Beian ICP and gongan information for Chinese users. See: http://www.beian.miit.gov.cn, http://www.beian.gov.cn
   beian:
     enable: false
@@ -745,12 +749,23 @@ firestore:
 
 # Show Views / Visitors of the website / page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi
+#统计网站访问量
 busuanzi_count:
-  enable: false
-  total_visitors: true
-  total_visitors_icon: user
-  total_views: true
-  total_views_icon: eye
+  enable: true
+  #统计访客数
+  # total_visitors: true
+  # total_visitors_icon: user
+  # custom uv span for the whole site
+  site_uv: true
+  site_uv_header: 访客数
+  site_uv_footer: 人
+  # #统计访问数
+  # total_views: true
+  # total_views_icon: eye
+  site_pv: true
+  site_pv_header: 总访问量
+  site_pv_footer: 次
+  #统计文章阅读数
   post_views: true
   post_views_icon: eye
 
