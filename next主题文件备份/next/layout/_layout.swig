@@ -75,6 +75,12 @@
 {% endif %}
 </body>
 </html>
+<!-- hexo --> <!-- 天气插件https://cj.weather.com.cn/plugin/pc-->
+<script type="text/javascript">
+WIDGET = {FID: 'JLmdguZS43'}
+</script>
+<script type="text/javascript" src="https://apip.weatherdt.com/float/static/js/r.js?v=1111"></script>
+
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/clicklove.js"></script>
 
