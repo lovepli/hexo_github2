@@ -1118,6 +1118,8 @@ needmoreshare2:
       position: middleRight
       networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
 
+#配置网易云背景音乐 参考https://blog.csdn.net/yjwan521/article/details/80899992 
+background_music: //music.163.com/outchain/player?type=0&id=2606794523&auto=1&height=66
 
 # Assets
 css: css

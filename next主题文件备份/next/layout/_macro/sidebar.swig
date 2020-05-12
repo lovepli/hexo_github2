@@ -45,6 +45,13 @@
       {%- endif %}
 
     </div>
+
+<!-- 音乐播放器 参考https://blog.csdn.net/yjwan521/article/details/80899992 -->
+<div>
+ <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=210 height="110" src="{{ theme.background_music }}" >
+ </iframe>
+</div>
+
   </aside>
   <div id="sidebar-dimmer"></div>
 {% endmacro %}
