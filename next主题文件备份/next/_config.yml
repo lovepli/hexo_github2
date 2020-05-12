@@ -61,14 +61,15 @@ footer:
   since: 2020
 
   # Icon between year and copyright info.
+  #网页底部的动态桃心图像
   icon:
     # Icon name in Font Awesome. See: https://fontawesome.com/v4.7.0/icons/
     # `heart` is recommended with animation in red (#ff0000).
-    name: user
+    name: fas fa-heartbeat
     # If you want to animate the icon, set it to true.
-    animated: false
+    animated: true
     # Change the color of icon, using Hex Code.
-    color: "#808080"
+    color: "#ff0000"
 
   # If not defined, `author` from Hexo `_config.yml` will be used.
   copyright:
@@ -205,7 +206,7 @@ site_state: true
 social:
   GitHub: https://github.com/lovepli || github
   E-Mail: mailto:lovepli.cn@gmail.com || envelope
-  #Docsify文档: https://lovepli_cn.gitee.io/docsify-demo
+  Docsify文档: https://lovepli_cn.gitee.io/docsify-demo || meh-o
   #微博: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
   #Twitter: https://twitter.com/yourname || twitter
@@ -218,10 +219,10 @@ social:
 #图标名字
 social_icons:
   enable: true
-  icons_only: false
-  transition: false
+  icons_only: true #只显示图标，不显示文字说明
+  transition: true
   GitHub: github
-  #Docsify文档: meh-o  #还有有趣的图标 heartbeat spinner 通过图标网站https://fontawesome.com/icons?from=io
+  Docsify文档: meh-o  #还有有趣的图标 heartbeat spinner 通过图标网站https://fontawesome.com/icons?from=io
 
 # Blog rolls
 links_settings:
@@ -1096,14 +1097,6 @@ encrypt: # hexo-blog-encrypt
 
 #设置SSR
 #rss: /atom.xml
-
-#设置红心
-# footer: 
-#   icon:
-#     name: fas fa-heartbeat
-#     animated: true
-#     color: "#ff0000"
-
 
 
 
