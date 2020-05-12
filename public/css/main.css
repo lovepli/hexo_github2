@@ -1271,7 +1271,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #4113cf;
+  background: #81c2ac;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2648,4 +2648,23 @@ ul.breadcrumb li + li:last-child {
   padding: 0 5px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+body {
+  background: url("https://source.unsplash.com/random/1600x900");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+}
+.content-wrap {
+  opacity: 0.86;
+}
+code {
+  color: #ff7600;
+  background: #fbf7f8;
+  margin: 2px;
+}
+.highlight,
+code,
+pre {
+  border: 1px solid #d6d6d6;
 }

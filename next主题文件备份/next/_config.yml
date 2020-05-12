@@ -13,6 +13,7 @@ override: false
 reminder: false
 
 # Allow to cache content generation. Introduced in NexT v6.0.0.
+#开启网站缓存
 cache:
   enable: true
 
@@ -31,7 +32,7 @@ custom_file_path:
   #bodyEnd: source/_data/body-end.swig
   #variable: source/_data/variables.styl
   #mixin: source/_data/mixins.styl
-  #style: source/_data/styles.styl
+  style: source/_data/styles.styl #新版本没有了custom.styl这个文件
 
 
 # ---------------------------------------------------------------
@@ -186,7 +187,7 @@ sidebar:
   onmobile: false
 
 #头像设置
-# Sidebar Avatar
+# Sidebar Avatar. 
 avatar:
   # Replace the default image and set the url here.
   url: /images/yali.jpg
@@ -303,7 +304,7 @@ reward_settings:
   # If true, reward will be displayed in every article by default.
   enable: true
   animation: false
-  comment: '坚持原创技术分享，您的支持将鼓励我继续创作！'
+  comment: '请我吃辣条吧~~　谢谢打赏!'
 
 reward:
   wechatpay: /images/wechatpay.jpg
@@ -1098,6 +1099,24 @@ encrypt: # hexo-blog-encrypt
 #设置SSR
 #rss: /atom.xml
 
+
+# 文章分享功能
+needmoreshare2:
+  enable: true
+  postbottom:
+    enable: false
+    options:
+      iconStyle: box
+      boxForm: horizontal
+      position: bottomCenter
+      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
+  float:
+    enable: true
+    options:
+      iconStyle: default
+      boxForm: vertical
+      position: middleRight
+      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
 
 
 # Assets
