@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yaya-32x32-favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yaya-16x16-favicon">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="转载， 原文地址 https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;BOIqnOdPrsFacQX7GeG3-g  由于工作需要，最近做了很多 BI 取数的工作，需要用到一些比较高级的 SQL 技巧，总结了一下工作中用到的一些比较骚的进阶技巧，特此记录一下，以方便自己查阅，主要目录如下：  SQL 的书写规范  SQL 的一些进阶使用技巧  SQL 的优化方法   SQL 的书写规范在介绍一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql 进阶技巧--上">
+<meta property="og:url" content="http://yoursite.com/2020/05/09/simpread-SQL%20%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7-%E4%B8%8A/index.html">
+<meta property="og:site_name" content="lovepli">
+<meta property="og:description" content="转载， 原文地址 https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;BOIqnOdPrsFacQX7GeG3-g  由于工作需要，最近做了很多 BI 取数的工作，需要用到一些比较高级的 SQL 技巧，总结了一下工作中用到的一些比较骚的进阶技巧，特此记录一下，以方便自己查阅，主要目录如下：  SQL 的书写规范  SQL 的一些进阶使用技巧  SQL 的优化方法   SQL 的书写规范在介绍一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafFSI7Td2Mv0JnZmSicHp3c1l0FYGEojCKcg2yCa1WjkiakrHf8ic6vljug/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafTG66KbCksjiaY2QlZIn0ic8YCl3xuERAy8y0eUNxIsRMMxVJsLd7RJWA/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafaKSo3xVDax32Uxe3IpXLbTUu1qRelwokBu9BMSGWoUp6BKZicBkBOYw/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafvichEDxiaXbc4Blte81anGIiaESzuIOTumV2fmXrMDAlvsUIHWzq4Ngcw/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafaiaj5TmiaL9YtVS4bOmQ44icrGM93e4jqVqeFCOn3vKjjCDpqll8Ym50Q/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafxlFf7Uk0oIib0mHA3whINDyOfS8iaiakN4zYGwQo36CN4W2moImKadqSQ/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafvFcOMNmqS38ZNatfc1nMPD071VSEBGlXcAFsg6R4ZXiajz3b69FtfbQ/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafBt5ZiaPpXDcaBFdrENaH6UNuSnQAib7XVnabWlxwjp7FMHuJvU91s9nA/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iaf0WSLiaOrO4AU7c8R49fv2wibV5htTx2zZeib1mFPQicax9T4Xr9kCDZ5eQ/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafnac3JHqve9DPTVMkJGb3ja2zP7djBvuouO2ljqGIaVU94NZOeibHrpw/640?wx_fmt=jpeg">
+<meta property="article:published_time" content="2020-05-08T17:06:00.000Z">
+<meta property="article:modified_time" content="2020-05-10T02:00:31.635Z">
+<meta property="article:author" content="James Li">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafFSI7Td2Mv0JnZmSicHp3c1l0FYGEojCKcg2yCa1WjkiakrHf8ic6vljug/640?wx_fmt=png">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/09/simpread-SQL%20%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7-%E4%B8%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>sql 进阶技巧--上 | lovepli</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7f1c1d8fcf32904ec65bc7b9400f8cd8";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="lovepli" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">lovepli</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一名普通的搬砖工</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">18</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/lovepli" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/09/simpread-SQL%20%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7-%E4%B8%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yali.jpg">
+      <meta itemprop="name" content="James Li">
+      <meta itemprop="description" content="身体和灵魂，总要有一个在路上。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lovepli">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sql 进阶技巧--上
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-09 01:06:00" itemprop="dateCreated datePublished" datetime="2020-05-09T01:06:00+08:00">2020-05-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-10 10:00:31" itemprop="dateModified" datetime="2020-05-10T10:00:31+08:00">2020-05-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">评论数：</span>
+    
+    <a title="valine" href="/2020/05/09/simpread-SQL%20%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7-%E4%B8%8A/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/09/simpread-SQL%20%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7-%E4%B8%8A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>转载， 原文地址 <a href="https://mp.weixin.qq.com/s/BOIqnOdPrsFacQX7GeG3-g" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/BOIqnOdPrsFacQX7GeG3-g</a></p>
+</blockquote>
+<p>由于工作需要，最近做了很多 BI 取数的工作，需要用到一些比较高级的 SQL 技巧，总结了一下工作中用到的一些比较骚的进阶技巧，特此记录一下，以方便自己查阅，主要目录如下：</p>
+<ul>
+<li><p>SQL 的书写规范</p>
+</li>
+<li><p>SQL 的一些进阶使用技巧</p>
+</li>
+<li><p>SQL 的优化方法</p>
+</li>
+</ul>
+<h2 id="SQL-的书写规范"><a href="#SQL-的书写规范" class="headerlink" title="SQL 的书写规范"></a>SQL 的书写规范</h2><p>在介绍一些技巧之前，有必要强调一下规范，这一点我发现工作中经常被人忽略，其实遵循好的规范可读性会好很多，应该遵循哪些规范呢</p>
+<p>1、 表名要有意义，且标准 SQL 中规定表名的第一个字符应该是字母。</p>
+<p>2、注释，有单行注释和多行注释，如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-- 单行注释</span><br><span class="line">-- 从SomeTable中查询col_1 </span><br><span class="line">SELECT col_1</span><br><span class="line">  FROM SomeTable;</span><br><span class="line"></span><br><span class="line">&#x2F;*</span><br><span class="line">多行注释</span><br><span class="line">从 SomeTable 中查询 col_1 </span><br><span class="line">*&#x2F;</span><br><span class="line">SELECT col_1</span><br><span class="line">  FROM SomeTable;</span><br></pre></td></tr></table></figure>
+
+<p>多行注释很多人不知道，这种写法不仅可以用来添加真正的注释，也可以用来注释代码，非常方便</p>
+<p>3、缩进</p>
+<p>就像写 Java，Python 等编程语言一样 ，SQL 也应该有缩进，良好的缩进对提升代码的可读性帮助很大，以下分别是好的缩进与坏的缩进示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-- 好的缩进</span><br><span class="line">SELECT col_1, </span><br><span class="line">    col_2, </span><br><span class="line">    col_3,</span><br><span class="line">    COUNT(*) </span><br><span class="line">  FROM tbl_A</span><br><span class="line"> WHERE col_1 &#x3D; &#39;a&#39;</span><br><span class="line">   AND col_2 &#x3D; ( SELECT MAX(col_2)</span><br><span class="line">                   FROM tbl_B</span><br><span class="line">                  WHERE col_3 &#x3D; 100 )</span><br><span class="line"> GROUP BY col_1,</span><br><span class="line">          col_2,</span><br><span class="line">          col_3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- 坏的示例</span><br><span class="line">SELECT col1_1, col_2, col_3, COUNT(*)</span><br><span class="line">FROM   tbl_A</span><br><span class="line">WHERE  col1_1 &#x3D; &#39;a&#39;</span><br><span class="line">AND    col1_2 &#x3D; (</span><br><span class="line">SELECT MAX(col_2)</span><br><span class="line">FROM   tbl_B</span><br><span class="line">WHERE  col_3 &#x3D; 100</span><br><span class="line">) GROUP BY col_1, col_2, col_3</span><br></pre></td></tr></table></figure>
+
+<p>4、空格</p>
+<p>代码中应该适当留有一些空格，如果一点不留，代码都凑到一起， 逻辑单元不明确，阅读的人也会产生额外的压力，以下分别是是好的与坏的示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-- 好的示例</span><br><span class="line">SELECT col_1</span><br><span class="line">  FROM tbl_A A, tbl_B B</span><br><span class="line"> WHERE ( A.col_1 &gt;&#x3D; 100 OR A.col_2 IN ( &#39;a&#39;, &#39;b&#39; ) )</span><br><span class="line">   AND A.col_3 &#x3D; B.col_3;</span><br><span class="line"></span><br><span class="line">-- 坏的示例</span><br><span class="line">SELECT col_1</span><br><span class="line">  FROM tbl_A A,tbl_B B</span><br><span class="line"> WHERE (A.col_1&gt;&#x3D;100 OR A.col_2 IN (&#39;a&#39;,&#39;b&#39;))</span><br><span class="line">   AND A.col_3&#x3D;B.col_3;</span><br></pre></td></tr></table></figure>
+
+<p>4、大小写</p>
+<p>关键字使用大小写，表名列名使用小写，如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT col_1, col_2, col_3,</span><br><span class="line">    COUNT(*)</span><br><span class="line">  FROM tbl_A</span><br><span class="line"> WHERE col_1 &#x3D; &#39;a&#39;</span><br><span class="line">   AND col_2 &#x3D; ( SELECT MAX(col_2)</span><br><span class="line">                   FROM tbl_B</span><br><span class="line">                  WHERE col_3 &#x3D; 100 )</span><br><span class="line"> GROUP BY col_1, col_2, col_3</span><br></pre></td></tr></table></figure>
+
+<p>花了这么多时间强调规范，有必要吗，有！好的规范让代码的可读性更好，更有利于团队合作，之后的 SQL 示例都会遵循这些规范。</p>
+<h2 id="SQL-的一些进阶使用技巧"><a href="#SQL-的一些进阶使用技巧" class="headerlink" title="SQL 的一些进阶使用技巧"></a>SQL 的一些进阶使用技巧</h2><p><strong>一、巧用 CASE WHEN 进行统计</strong></p>
+<p>来看看如何巧用 CASE WHEN 进行定制化统计, 假设我们有如下的需求，希望根据左边各个市的人口统计每个省的人口</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafFSI7Td2Mv0JnZmSicHp3c1l0FYGEojCKcg2yCa1WjkiakrHf8ic6vljug/640?wx_fmt=png" alt=""></p>
+<p>使用 CASE WHEN 如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT CASE pref_name</span><br><span class="line">      WHEN &#39;长沙&#39; THEN &#39;湖南&#39; </span><br><span class="line">      WHEN &#39;衡阳&#39; THEN &#39;湖南&#39;</span><br><span class="line">      WHEN &#39;海口&#39; THEN &#39;海南&#39; </span><br><span class="line">      WHEN &#39;三亚&#39; THEN &#39;海南&#39;</span><br><span class="line">    ELSE &#39;其他&#39; END AS district,</span><br><span class="line">    SUM(population) </span><br><span class="line">FROM PopTbl</span><br><span class="line">GROUP BY district;</span><br></pre></td></tr></table></figure>
+
+<p><strong>二、巧用 CASE WHEN 进行更新</strong></p>
+<p>现在某公司员人工资信息表如下:</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafTG66KbCksjiaY2QlZIn0ic8YCl3xuERAy8y0eUNxIsRMMxVJsLd7RJWA/640?wx_fmt=png" alt=""></p>
+<p>现在公司出台了一个奇葩的规定</p>
+<ol>
+<li><p>对当前工资为 1 万以上的员工，降薪 10%。</p>
+</li>
+<li><p>对当前工资低于 1 万的员工，加薪 20%。</p>
+</li>
+</ol>
+<p>一些人不假思索可能写出了以下的 SQL:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--条件1</span><br><span class="line">UPDATE Salaries</span><br><span class="line">SET salary &#x3D; salary * 0.9 WHERE salary &gt;&#x3D; 10000;</span><br><span class="line">--条件2</span><br><span class="line">UPDATE Salaries</span><br><span class="line">SET salary &#x3D; salary * 1.2</span><br><span class="line">WHERE salary &lt; 10000;</span><br></pre></td></tr></table></figure>
+
+<p>这么做其实是有问题的， 什么问题，对小明来说，他的工资是 10500，执行第一个 SQL 后，工资变为 10500 * 0.9 = 9450, 紧接着又执行条件 2， 工资变为了 9450 * 1.2 = 11340，反而涨薪了！</p>
+<p>如果用 CASE WHEN 可以解决此类问题，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UPDATE Salaries</span><br><span class="line">SET salary &#x3D; CASE WHEN salary &gt;&#x3D; 10000 THEN salary * 0.9</span><br><span class="line">WHEN salary &lt; 10000 THEN salary * 1.2</span><br><span class="line">ELSE salary END;</span><br></pre></td></tr></table></figure>
+
+<p><strong>三、巧用 HAVING 子句</strong></p>
+<p>一般 HAVING 是与 GROUP BY 结合使用的，但其实它是可以独立使用的， 假设有如下表，第一列 seq 叫连续编号，但其实有些编号是缺失的，怎么知道编号是否缺失呢，</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafaKSo3xVDax32Uxe3IpXLbTUu1qRelwokBu9BMSGWoUp6BKZicBkBOYw/640?wx_fmt=png" alt=""></p>
+<p>用 HAVING 表示如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT &#39;存在缺失的编号&#39; AS gap</span><br><span class="line">  FROM SeqTbl</span><br><span class="line">HAVING COUNT(*) &lt;&gt; MAX(seq);</span><br></pre></td></tr></table></figure>
+
+<p><strong>四、自连接</strong></p>
+<p>针对相同的表进行的连接被称为 “自连接”(self join)，这个技巧常常被人们忽视，其实是有挺多妙用的</p>
+<p>1、删除重复行</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafvichEDxiaXbc4Blte81anGIiaESzuIOTumV2fmXrMDAlvsUIHWzq4Ngcw/640?wx_fmt=png" alt=""></p>
+<p>上图中有三个橘子，需要把这些重复的行给删掉，用如下自连接可以解决：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM Products P1</span><br><span class="line"> WHERE id &lt; ( SELECT MAX(P2.id) </span><br><span class="line">                   FROM Products P2 </span><br><span class="line">                  WHERE P1.name &#x3D; P2.name </span><br><span class="line">                    AND P1.price &#x3D; P2.price );</span><br></pre></td></tr></table></figure>
+
+<p>2、排序</p>
+<p>在 db 中，我们经常需要按分数，人数，销售额等进行排名，有 Oracle, DB2 中可以使用 RANK 函数进行排名，不过在 MySQL 中 RANK 函数未实现，这种情况我们可以使用自连接来实现, 如对以下 Products 表按价格高低进行排名</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafaiaj5TmiaL9YtVS4bOmQ44icrGM93e4jqVqeFCOn3vKjjCDpqll8Ym50Q/640?wx_fmt=png" alt=""></p>
+<p>使用自连接可以这么写:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 排序从 1 开始。如果已出现相同位次，则跳过之后的位次 </span><br><span class="line">SELECT P1.name,</span><br><span class="line">       P1.price,</span><br><span class="line">       (SELECT COUNT(P2.price)</span><br><span class="line">          FROM Products P2</span><br><span class="line">         WHERE P2.price &gt; P1.price) + 1 AS rank_1</span><br><span class="line">  FROM Products P1 </span><br><span class="line">  ORDER BY rank_1;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">name price rank </span><br><span class="line">----- ------ ------ </span><br><span class="line">橘子    100     1 </span><br><span class="line">西瓜     80     2 </span><br><span class="line">苹果     50     3 </span><br><span class="line">葡萄     50     3 </span><br><span class="line">香蕉     50     3 </span><br><span class="line">柠檬     30     6</span><br></pre></td></tr></table></figure>
+
+<p><strong>五、巧用 COALESCE 函数</strong></p>
+<p>此函数作用返回参数中的第一个非空表达式，假设有如下商品，我们重新格式化一样，如果 city 为 null，代表商品不在此城市发行，但我们在展示结果的时候不想展示 null，而想展示’N/A’, 可以这么做:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT </span><br><span class="line">    COALESCE(city, &#39;N&#x2F;A&#39;)</span><br><span class="line">  FROM</span><br><span class="line">    customers;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafxlFf7Uk0oIib0mHA3whINDyOfS8iaiakN4zYGwQo36CN4W2moImKadqSQ/640?wx_fmt=png" alt=""></p>
+<h2 id="SQL-性能优化技巧"><a href="#SQL-性能优化技巧" class="headerlink" title="SQL 性能优化技巧"></a>SQL 性能优化技巧</h2><p><strong>一、参数是子查询时，使用 EXISTS 代替 IN</strong></p>
+<p>如果 IN 的参数是（1，2，3）这样的值列表时，没啥问题，但如果参数是子查询时，就需要注意了。比如，现在有如下两个表：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafvFcOMNmqS38ZNatfc1nMPD071VSEBGlXcAFsg6R4ZXiajz3b69FtfbQ/640?wx_fmt=png" alt=""></p>
+<p>现在我们要查出同时存在于两个表的员工，即田中和铃木，则以下用 IN 和 EXISTS 返回的结果是一样，但是用 EXISTS 的 SQL 会更快:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-- 慢</span><br><span class="line">SELECT * </span><br><span class="line">  FROM Class_A</span><br><span class="line">WHERE id IN (SELECT id </span><br><span class="line">               FROM  CLASS_B);</span><br><span class="line"></span><br><span class="line">-- 快</span><br><span class="line">SELECT *</span><br><span class="line">  FROM Class_A A </span><br><span class="line"> WHERE EXISTS</span><br><span class="line">(SELECT * </span><br><span class="line">   FROM Class_B  B</span><br><span class="line">  WHERE A.id &#x3D; B.id);</span><br></pre></td></tr></table></figure>
+
+<p>为啥使用 EXISTS 的 SQL 运行更快呢，有两个原因</p>
+<ol>
+<li><p>可以 ` 用到索引，如果连接列 (id) 上建立了索引，那么查询 Class_B 时不用查实际的表，只需查索引就可以了。</p>
+</li>
+<li><p>如果使用 EXISTS，那么只要查到一行数据满足条件就会终止查询， 不用像使用 IN 时一样扫描全表。在这一点上 NOT EXISTS 也一样</p>
+</li>
+</ol>
+<p>另外如果 IN 后面如果跟着的是子查询，由于 SQL 会先执行 IN 后面的子查询，会将子查询的结果保存在一张临时的工作表里（内联视图），然后扫描<strong>整个视图</strong>，显然扫描整个视图这个工作很多时候是非常耗时的，而用 EXISTS 不会生成临时表。</p>
+<p>当然了，如果 IN 的参数是子查询时，也可以用连接来代替，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 使用连接代替 IN SELECT A.id, A.name</span><br><span class="line">FROM Class_A A INNER JOIN Class_B B ON A.id &#x3D; B.id;</span><br></pre></td></tr></table></figure>
+
+<p>用到了 「id」列上的索引，而且由于没有子查询，也不会生成临时表</p>
+<p><strong>二、避免排序</strong></p>
+<p>SQL 是声明式语言，即对用户来说，只关心它能做什么，不用关心它怎么做。这样可能会产生潜在的性能问题：排序，会产生排序的代表性运算有下面这些</p>
+<ul>
+<li><p>GROUP BY 子句</p>
+</li>
+<li><p>ORDER BY 子句</p>
+</li>
+<li><p>聚合函数 (SUM、COUNT、AVG、MAX、MIN)</p>
+</li>
+<li><p>DISTINCT</p>
+</li>
+<li><p>集合运算符 (UNION、INTERSECT、EXCEPT)</p>
+</li>
+<li><p>窗口函数 (RANK、ROW_NUMBER 等)</p>
+</li>
+</ul>
+<p>如果在内存中排序还好，但如果内存不够导致需要在硬盘上排序上的话，性能就会急剧下降，所以我们需要减少不必要的排序。怎样做可以减少排序呢。</p>
+<p>1、 使用集合运算符的 ALL 可选项</p>
+<p>SQL 中有 UNION，INTERSECT，EXCEPT 三个集合运算符，默认情况下，这些运算符会为了避免重复数据而进行排序，对比一下使用 UNION 运算符加和不加 ALL 的情况:</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafBt5ZiaPpXDcaBFdrENaH6UNuSnQAib7XVnabWlxwjp7FMHuJvU91s9nA/640?wx_fmt=png" alt=""></p>
+<p>注意：加 ALL 是优化性能非常有效的手段，不过前提是不在乎结果是否有重复数据。</p>
+<p>2、使用 EXISTS 代表 DISTINCT</p>
+<p>为了排除重复数据， DISTINCT 也会对结果进行排序，如果需要对两张表的连接结果进行去重，可以考虑用 EXISTS 代替 DISTINCT，这样可以避免排序。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUo2Wl6IoGWEAxF17jC32iaf0WSLiaOrO4AU7c8R49fv2wibV5htTx2zZeib1mFPQicax9T4Xr9kCDZ5eQ/640?wx_fmt=png" alt=""></p>
+<p>如何找出有销售记录的商品，使用如下 DISTINCT 可以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT DISTINCT I.item_no</span><br><span class="line">FROM Items I INNER JOIN SalesHistory SH</span><br><span class="line">ON I. item_no &#x3D; SH. item_no;</span><br></pre></td></tr></table></figure>
+
+<p>不过更好的方式是使用 EXISTS:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT item_no FROM Items I</span><br><span class="line">WHERE EXISTS </span><br><span class="line">        (SELECT *</span><br><span class="line">           FROM SalesHistory SH</span><br><span class="line">          WHERE I.item_no &#x3D; SH.item_no);</span><br></pre></td></tr></table></figure>
+
+<p>既用到了索引，又避免了排序对性能的损耗。</p>
+<p><strong>二、在极值函数中使用索引（MAX/MIN）</strong></p>
+<p>使用 MAX/ MIN 都会对进行排序，如果参数字段上没加索引会导致全表扫描，如果建有索引，则只需要扫描索引即可，对比如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 这样写需要扫描全表 </span><br><span class="line">SELECT MAX(item)</span><br><span class="line">  FROM Items;</span><br><span class="line"></span><br><span class="line">-- 这样写能用到索引 </span><br><span class="line">SELECT MAX(item_no)</span><br><span class="line">  FROM Items;</span><br></pre></td></tr></table></figure>
+
+<p>注意：极值函数参数推荐为索引列中并不是不需要排序，而是优化了排序前的查找速度（毕竟索引本身就是有序排列的）。</p>
+<p><strong>三、能写在 WHERE 子句里的条件不要写在 HAVING 子句里</strong></p>
+<p>下列 SQL 语句返回的结果是一样的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 聚合后使用 HAVING 子句过滤</span><br><span class="line">SELECT sale_date, SUM(quantity)</span><br><span class="line">  FROM SalesHistory GROUP BY sale_date</span><br><span class="line">HAVING sale_date &#x3D; &#39;2007-10-01&#39;;</span><br><span class="line"></span><br><span class="line">-- 聚合前使用 WHERE 子句过滤</span><br><span class="line">SELECT sale_date, SUM(quantity)</span><br><span class="line">  FROM SalesHistory</span><br><span class="line"> WHERE sale_date &#x3D; &#39;2007-10-01&#39; </span><br><span class="line"> GROUP BY sale_date;</span><br></pre></td></tr></table></figure>
+
+<p>使用第二条语句效率更高，原因主要有两点</p>
+<ol>
+<li><p>使用 GROUP BY 子句进行聚合时会进行排序，如果事先通过 WHERE 子句能筛选出一部分行，能减轻排序的负担</p>
+</li>
+<li><p>在 WHERE 子句中可以使用索引，而 HAVING 子句是针对聚合后生成的视频进行筛选的，但很多时候聚合后生成的视图并没有保留原表的索引结构</p>
+</li>
+</ol>
+<p><strong>四、在 GROUP BY 子句和 ORDER BY 子句中使用索引</strong></p>
+<p>GROUP BY 子句和 ORDER BY 子句一般都会进行排序，以对行进行排列和替换，不过如果指定带有索引的列作为这两者的参数列，由于用到了索引，可以实现高速查询，由于索引是有序的，排序本身都会被省略掉</p>
+<p><strong>五、使用索引时，条件表达式的左侧应该是原始字段</strong></p>
+<p>假设我们在 col 列上建立了索引，则下面这些 SQL 语句无法用到索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">  FROM SomeTable</span><br><span class="line"> WHERE col * 1.1 &gt; 100;</span><br><span class="line"></span><br><span class="line">SELECT *</span><br><span class="line">  FROM SomeTable</span><br><span class="line"> WHERE SUBSTR(col, 1, 1) &#x3D; &#39;a&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>以上第一个 SQL 在索引列上进行了运算, 第二个 SQL 对索引列使用了函数，均无法用到索引，正确方式是把列单独放在左侧, 如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">  FROM SomeTable</span><br><span class="line"> WHERE col_1 &gt; 100 &#x2F; 1.1;</span><br></pre></td></tr></table></figure>
+
+<p>当然如果需要对此列使用函数，则无法避免在左侧运算，可以考虑使用函数索引，不过一般不推荐随意这么做。</p>
+<p><strong>六、尽量避免使用否定形式</strong></p>
+<p>如下的几种否定形式不能用到索引：</p>
+<ul>
+<li><p>&lt;&gt;</p>
+</li>
+<li><p>!=</p>
+</li>
+<li><p>NOT IN</p>
+</li>
+</ul>
+<p>所以以下 了 SQL 语句会导致全表扫描</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">  FROM SomeTable</span><br><span class="line"> WHERE col_1 &lt;&gt; 100;</span><br></pre></td></tr></table></figure>
+
+<p>可以改成以下形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">  FROM SomeTable</span><br><span class="line"> WHERE col_1 &gt; 100 or col_1 &lt; 100;</span><br></pre></td></tr></table></figure>
+
+<p><strong>七、进行默认的类型转换</strong></p>
+<p>假设 col 是 char 类型，则推荐使用以下第二，三条 SQL 的写法，不推荐第一条 SQL 的写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">× SELECT * FROM SomeTable WHERE col_1 &#x3D; 10;</span><br><span class="line">○ SELECT * FROM SomeTable WHERE col_1 &#x3D; &#39;10&#39;;</span><br><span class="line">○ SELECT * FROM SomeTable WHERE col_1 &#x3D; CAST(10, AS CHAR(2));</span><br></pre></td></tr></table></figure>
+
+<p>虽然第一条 SQL 会默认把 10 转成 ‘10’，但这种默认类型转换不仅会增加额外的性能开销，还会导致索引不可用，所以建议使用的时候进行类型转换。</p>
+<p><strong>八、减少中间表</strong></p>
+<p>在 SQL 中，子查询的结果会产生一张新表，不过如果不加限制大量使用中间表的话，会带来两个问题，一是展示数据需要消耗内存资源，二是原始表中的索引不容易用到，所以尽量减少中间表也可以提升性能。</p>
+<p><strong>九、灵活使用 HAVING 子句</strong></p>
+<p>这一点与上面第八条相呼应，对聚合结果指定筛选条件时，使用 HAVING 是基本的原则，可能一些工程师会倾向于使用下面这样的写法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">  FROM (SELECT sale_date, MAX(quantity) AS max_qty</span><br><span class="line">          FROM SalesHistory </span><br><span class="line">         GROUP BY sale_date) TMP</span><br><span class="line">         WHERE max_qty &gt;&#x3D; 10;</span><br></pre></td></tr></table></figure>
+
+<p>虽然上面这样的写法能达到目的，但会生成 TMP 这张临时表，所以应该使用下面这样的写法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT sale_date, MAX(quantity) </span><br><span class="line">  FROM SalesHistory</span><br><span class="line"> GROUP BY sale_date</span><br><span class="line">HAVING MAX(quantity) &gt;&#x3D; 10;</span><br></pre></td></tr></table></figure>
+
+<p>HAVING 子句和聚合操作是同时执行的，所以比起生成中间表后再执行 HAVING 子句，效率会更高，代码也更简洁</p>
+<p><strong>10、需要对多个字段使用 IN 谓词时，将它们汇总到一处</strong></p>
+<p>一个表的多个字段可能都使用了 IN 谓词，如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT id, state, city </span><br><span class="line">  FROM Addresses1 A1</span><br><span class="line"> WHERE state IN (SELECT state</span><br><span class="line">                   FROM Addresses2 A2</span><br><span class="line">                  WHERE A1.id &#x3D; A2.id) </span><br><span class="line">    AND city IN (SELECT city</span><br><span class="line">                   FROM Addresses2 A2 </span><br><span class="line">                  WHERE A1.id &#x3D; A2.id);</span><br></pre></td></tr></table></figure>
+
+<p>这段代码用到了两个子查询，也就产生了两个中间表，可以像下面这样写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">  FROM Addresses1 A1</span><br><span class="line"> WHERE id || state || city</span><br><span class="line"> IN (SELECT id || state|| city</span><br><span class="line">       FROM Addresses2 A2);</span><br></pre></td></tr></table></figure>
+
+<p>这样子查询不用考虑关联性，没有中间表产生，而且只执行一次即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文一开始花了挺大的篇幅来讲解 SQL 的规范，请大家务必重视这部分内部，良好的规范有利于团队协作，对于代码的阅读也比较友好。</p>
+<p>之后介绍了一些 SQL 的比较高级的用法，巧用这些技巧确实能达到事半功倍的效果，由于本文篇幅有限只是介绍了一部分，下篇我们会再介绍一些其他的技巧，敬请期待哦</p>
+<p><strong>巨人的肩膀</strong></p>
+<ul>
+<li>&lt;&lt;SQL 进阶教程&gt;&gt;</li>
+</ul>
+<p>欢迎大家关注公号，共同进步！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/OyweysCSeLUo2Wl6IoGWEAxF17jC32iafnac3JHqve9DPTVMkJGb3ja2zP7djBvuouO2ljqGIaVU94NZOeibHrpw/640?wx_fmt=jpeg" alt=""></p>
+
+    </div>
+
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="James Li 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="James Li 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/08/%E4%B8%80%E6%96%87%E5%B8%AE%E4%BD%A0%E7%90%86%E6%B8%85%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="prev" title="一文帮你理清面试知识点">
+      <i class="fa fa-chevron-left"></i> 一文帮你理清面试知识点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/09/simpread-Java%E4%BB%A3%E7%A0%81%E7%B2%BE%E7%AE%80%E4%B9%8B%E9%81%93/" rel="next" title="java 代码精简之道">
+      java 代码精简之道 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-的书写规范"><span class="nav-number">1.</span> <span class="nav-text">SQL 的书写规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-的一些进阶使用技巧"><span class="nav-number">2.</span> <span class="nav-text">SQL 的一些进阶使用技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-性能优化技巧"><span class="nav-number">3.</span> <span class="nav-text">SQL 性能优化技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="James Li"
+      src="/images/yali.jpg">
+  <p class="site-author-name" itemprop="name">James Li</p>
+  <div class="site-description" itemprop="description">身体和灵魂，总要有一个在路上。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lovepli" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lovepli" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lovepli.cn@gmail.com" title="E-Mail → mailto:lovepli.cn@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://hexo.io/zh-cn/" title="https:&#x2F;&#x2F;hexo.io&#x2F;zh-cn&#x2F;" rel="noopener" target="_blank">hexo主题next</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+<!-- 可以用下面的符号注释，注释代码用下面括号括起来 -->
+<!--  -->
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James Li</span>
+</div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+     <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+     <span class="post-meta-divider">|</span>
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共154.8k字</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'p4wAcGXeYyOl1WkgIK2k35yt-gzGzoHsz',
+      appKey     : 'MmMcE9bjUyCm4Fk3tCHqTVRg',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/0f81ff2f.js","daovoice")
+  daovoice('init', {
+      app_id: "cabe19be"
+    });
+  daovoice('update');
+  </script>
+
+
+
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/clicklove.js"></script>
+

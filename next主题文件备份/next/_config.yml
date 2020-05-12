@@ -39,6 +39,7 @@ custom_file_path:
 # See: https://theme-next.org/docs/getting-started/
 # ---------------------------------------------------------------
 
+# 网站图标设置 图标素材网站：easyicon、iconfont
 favicon:
   # small: /images/favicon-16x16-next.png
   # medium: /images/favicon-32x32-next.png
@@ -47,10 +48,10 @@ favicon:
   #android_manifest: /images/manifest.json
   #ms_browserconfig: /images/browserconfig.xml
   # 这里的/images路径是themes/next/source下的images
-  small: /images/favicon.ico
-  medium: /images/favicon.ico
-  apple_touch_icon: /images/favicon.ico
-  safari_pinned_tab: /images/favicon.ico
+  small: /images/yaya-16x16-favicon
+  medium: /images/yaya-32x32-favicon.ico
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
 
 # Show multilingual switcher in footer.
 language_switcher: false
@@ -96,10 +97,11 @@ footer:
 # Available values of license: by | by-nc | by-nc-nd | by-nc-sa | by-nd | by-sa | zero
 # You can set a language value if you prefer a translated version of CC license, e.g. deed.zh
 # CC licenses are available in 39 languages, you can find the specific and correct abbreviation you need on https://creativecommons.org
+#文末添加版权说明
 creative_commons:
   license: by-nc-sa
   sidebar: false
-  post: false
+  post: false  # 将false改为true即可显示版权信息
   language:
 
 
@@ -138,8 +140,8 @@ menu:
 
 # Enable / Disable menu icons / item badges.
 menu_settings:
-  icons: true
-  badges: false
+  icons: true # 是否显示各个页面的图标
+  badges: true # 是否显示分类/标签/归档页的内容量
 
 # 菜单图标
 menu_icons:
@@ -398,10 +400,11 @@ codeblock:
   # Code Highlight theme
   # Available values: normal | night | night eighties | night blue | night bright | solarized | solarized dark | galactic
   # See: https://github.com/chriskempson/tomorrow-theme
-  highlight_theme: night
+  #代码块背景
+  highlight_theme: night eighties
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Show text copy result.
     show_result: false
     # Available values: default | flat | mac
@@ -568,7 +571,8 @@ pjax: false
 
 # FancyBox is a tool that offers a nice and elegant way to add zooming functionality for images.
 # For more information: https://fancyapps.com/fancybox
-fancybox: false
+#图片可点击放大查看，放大后可关闭
+fancybox: true
 
 # A JavaScript library for zooming images like Medium.
 # Do not enable both `fancybox` and `mediumzoom`.
@@ -918,10 +922,11 @@ pace:
   # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal
   theme: minimal
 
+#设置背景动画
 # JavaScript 3D library.
 # Dependencies: https://github.com/theme-next/theme-next-three
 three:
-  enable: true
+  enable: false
   three_waves: true
   canvas_lines: false
   canvas_sphere: false
@@ -935,6 +940,15 @@ canvas_ribbon:
   alpha: 0.6 # The transparency of the ribbon
   zIndex: -1 # The display level of the ribbon
 
+# Canvas-nest
+# Dependencies: https://github.com/theme-next/theme-next-canvas-nest
+canvas_nest:
+  enable: true
+  onmobile: true # display on mobile or not
+  color: "0,0,255" # RGB values, use ',' to separate
+  opacity: 0.5 # the opacity of line: 0~1
+  zIndex: -1 # z-index property of the background
+  count: 99 # the number of lines
 
 #! ---------------------------------------------------------------
 #! DO NOT EDIT THE FOLLOWING SETTINGS
